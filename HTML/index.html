@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录</title>
+    <style>
+    .main{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+    }
+    .yohu{
+        margin-bottom:10px;
+        
+    }
+    input{
+        width: 200px;
+        height: 30px;
+    }
+#delu{
+    width: 208px;
+        height: 36px;
+        background: #FFF948;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+    </style>
+</head>
+<body>
+   <div class="main">
+       <div class="yohu"><input id="name" type="text" placeholder="请输入用户名"></div>
+       <div class="yohu"><input id="password" type="password" placeholder="请输入密码"></div>
+       <div id="delu" >登录</div>
+   </div>
+</body>
+<script type="module">
+import methods from './module.js';
+window.onload=function(){
+        //1.获取a节点，并为其添加onclick响应函数
+        document.getElementById("delu").onclick=function(){
+            console.log(1)
+             //3.创建一个XMLHttpRequest对象
+             var name=document.getElementById('name').value;
+             var password=document.getElementById('password').value;
+             var url='http://127.0.0.1:3000/getposts';
+             var data="name="+name+"&password="+password;
+             methods.ajax(url,data,function(result){
+                if(result=="用户名密码正确")
+                    window.location.href='./insert.html';
+                else
+                alert("请输入正确的用户名密码！");
+             }
+             );  
+             console.log(2)
+             return false;
+        }
+    }
+</script>
+</html>

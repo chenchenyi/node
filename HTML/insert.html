@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>插入数据</title>
+    <style>
+        .main{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+    }
+    .yohu{
+        margin-bottom:10px;
+        
+    }
+    input{
+        width: 200px;
+        height: 30px;
+    }
+#delu{
+    width: 208px;
+        height: 36px;
+        background: #FFF948;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+#lian li{
+    display: flex;
+}
+#lian li span{
+    flex:1;
+}
+#lian li a{
+    cursor: pointer;
+    color: #f3f4;
+}
+    </style>
+</head>
+<body>
+    <div class="main">
+        <div class="yohu"><input id="name" type="text" placeholder="请输入姓名"></div>
+        <div class="yohu"><input id="age" type="text" placeholder="请输入年龄"></div>
+        <div class="yohu"><input id="number" type="text" placeholder="请输入学号"></div>
+        <div class="yohu"><input id="clas" type="text" placeholder="请输入班级"></div>
+        <div id="delu">添加</div>
+    </div> 
+    <div>
+        <ul id="lian">
+            <li >
+             <span>姓名</span> <span>年龄</span> <span>学号</span> <span>班级</span>
+        </li>
+        
+    </ul>
+    </div>
+</body>
+<script type="module">
+    import methods from './module.js';
+   
+   
+    window.onload=function(){
+        var data233=[];
+        var url1="http://127.0.0.1:3000/getAll";
+        methods.ajax(url1,"",function(result){
+                   if(result)
+                 {result=JSON.parse(result);
+                    for(let i=0;i<result.length;i++)
+                      data233.push(result[i]);
+                      addNode(data233);  
+                } 
+                   else
+                   alert(result);
+                });
+        
+       }
+       document.getElementById("delu").onclick=function(){
+                //3.创建一个XMLHttpRequest对象
+                
+                var name=document.getElementById('name').value;
+                var age=document.getElementById('age').value;
+                var number=document.getElementById('number').value;
+                var clas=document.getElementById('clas').value;
+                var url='http://127.0.0.1:3000/add';
+                var data="name="+name+"&age="+age+"&number="+number+"&clas="+clas;
+               methods.ajax(url,data,function(result){
+                   if(result=='添加成功')
+                  {
+                      alert("添加成功！");  
+                      window.location.reload();    
+        }
+                else
+                alert(result);});
+                return false;
+           }
+    function addNode(data){
+    for(let i=0;i<data.length;i++)
+    {
+        var node=document.createElement('li');
+       node.innerHTML='<span>'+data[i].name+'</span> <span>'+data[i].age+'</span> <span>'+data[i].number+'</span> <span>'+data[i].clas+'</span>'+"<a data="+data[i].number+">删除</a>";
+       document.getElementById("lian").appendChild(node);
+    }
+       
+   }
+   var obj=document.getElementById('lian');
+   obj.addEventListener('click',function(e){
+       if(e.target.getAttribute("data")!=null)
+    delete1('number='+e.target.getAttribute("data"));
+   })
+   function delete1(data)
+   {
+       var url='http://127.0.0.1:3000/delete';
+       methods.ajax(url,data,function(result){
+                   if(result=='删除成功')
+                  {
+                      alert("删除成功！");  
+                      window.location.reload();    
+        }
+                else
+                alert(result);});
+   }
+   </script>
+</html>
